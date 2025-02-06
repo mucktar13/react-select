@@ -160,5 +160,3 @@ import Select from "./Select";
 ```
 
 ---
-
-This README provides a comprehensive guide to using the `Select` component, including its features, props, usage examples, and component structure.
