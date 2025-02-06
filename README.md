@@ -145,18 +145,30 @@ const MyComponent: React.FC = () => {
 
 - React
 - lucide-react
-- util.ts (internal utility library)
+- tailwind
 
 ## Installation
 
+update your package.json dependencies
+
+```json
+{
+  "dependencies": {
+    "react-select": "https://github.com/mucktar13/react-select.git"
+  }
+}
+```
+
+install the package via package manager
+
 ```bash
-npm install your-select-component # Replace with your actual package name
+npm install react-select
 ```
 
 ## Import
 
 ```tsx
-import Select from "./Select";
+import Select from "react-select";
 ```
 
 ---
