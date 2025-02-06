@@ -44,6 +44,7 @@ export const useSelectContext = () => {
   return context;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function debounce<T extends (...args: any[]) => void>(
   func: T,
   delay: number
@@ -109,13 +110,18 @@ const SelectProvider: React.FC<
   };
 
   const handleOptionSelect = (option: Option) => {
+    let selected: Option[] = [];
+
     if (multiselect) {
-      const selected = [...selectedOptions, option];
+      selected = [...selectedOptions, option];
       setSelectedOptions(selected);
-      onChange && onChange(selected);
     } else {
+      selected = [option];
       setSelectedOptions([option]);
-      onChange && onChange(option);
+    }
+
+    if (onChange) {
+      onChange(selected);
     }
 
     setIsDropdownOpen(false);
