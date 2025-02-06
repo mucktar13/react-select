@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --color-input: var(--color-gray-300);
+  --dropdown-min-width: 400px;
+}
