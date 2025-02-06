@@ -23,4 +23,7 @@ export default defineConfig({
     },
   },
   plugins: [react(), tailwindcss(), dts({ rollupTypes: true })],
+  server: {
+    allowedHosts: true,
+  },
 });
