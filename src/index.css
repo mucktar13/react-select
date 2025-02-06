@@ -3,4 +3,5 @@
 @theme {
   --color-input: var(--color-gray-300);
   --dropdown-min-width: 400px;
+  --dropdown-z-index: 10;
 }

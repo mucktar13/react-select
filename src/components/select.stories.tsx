@@ -56,5 +56,21 @@ export const CustomRender: Story = {
     value: [{ label: "option 1", value: "option_1" }],
     searchable: false,
     multiselect: true,
+    renderItem: (option) => (
+      <div className="w-full bg-indigo-300">{option.label}</div>
+    ),
+  },
+};
+
+export const CustomStyle: Story = {
+  args: {
+    options: [
+      { label: "option 1", value: "option_1" },
+      { label: "option 2", value: "option_2" },
+    ],
+    value: [{ label: "option 1", value: "option_1" }],
+    searchable: false,
+    multiselect: true,
+    dropdownStyle: "z-[var(--dropdown-z-index)] bg-cyan-200",
   },
 };

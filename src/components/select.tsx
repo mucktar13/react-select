@@ -78,6 +78,7 @@ interface SelectProps {
   value?: SingleValue<Option> | MultiValue<Option>;
   multiselect?: boolean;
   searchable?: boolean;
+  dropdownStyle?: string;
   onChange?: (value: SingleValue<Option> | MultiValue<Option>) => void;
   renderItem?: (data: Option) => React.ReactNode;
 }
@@ -149,7 +150,7 @@ const SelectProvider: React.FC<
 };
 
 const Select: React.FC<SelectProps> = (props) => {
-  const { searchable = false, ...restProps } = props;
+  const { searchable = false, dropdownStyle, renderItem, ...restProps } = props;
   const triggerRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -158,9 +159,9 @@ const Select: React.FC<SelectProps> = (props) => {
         <SelectValue />
       </SelectTrigger>
 
-      <SelectContent triggerRef={triggerRef}>
+      <SelectContent triggerRef={triggerRef} className={dropdownStyle}>
         {searchable && <SelectSearch />}
-        <SelectItems />
+        <SelectItems renderItem={renderItem} />
       </SelectContent>
     </SelectProvider>
   );
@@ -183,7 +184,7 @@ const SelectTrigger = React.forwardRef<HTMLDivElement, SelectTriggerProps>(
         ref={ref}
         onClick={handleTriggerAction}
         className={cn(
-          "relative p-2 min-h-10 w-[var(--dropdown-min-width)] border border-input rounded-lg bg-primary text-primary-foreground shadow hover:bg-primary/90 flex  items-center justify-between cursor-pointer",
+          "relative p-2 min-h-[50px] w-[var(--dropdown-min-width)] border border-input rounded-lg bg-primary text-primary-foreground shadow hover:bg-primary/90 flex  items-center justify-between cursor-pointer",
           "group",
           className
         )}
@@ -287,8 +288,11 @@ const SelectSearch = React.forwardRef<HTMLDivElement, SelectSearchProps>(
     };
 
     return (
-      <div ref={ref} className="flex intems-center gap-4 border-b px-2 py-2">
-        <Search size={20} />
+      <div
+        ref={ref}
+        className="flex items-center gap-4 border-b border-b-input px-2 py-2"
+      >
+        <Search size={18} />
         <input
           type="text"
           placeholder={placeholder}
@@ -304,10 +308,11 @@ const SelectSearch = React.forwardRef<HTMLDivElement, SelectSearchProps>(
 SelectSearch.displayName = "SelectSearch";
 
 export type SelectItemsProps = {
-  renderItem?: React.ReactNode;
+  renderItem?: (data: Option) => React.ReactNode;
 };
+
 const SelectItems = React.forwardRef<HTMLUListElement, SelectItemsProps>(
-  (props, ref) => {
+  ({ renderItem }, ref) => {
     const { searchQuery, filteredOptions, handleOptionSelect } =
       useSelectContext();
 
@@ -332,20 +337,31 @@ const SelectItems = React.forwardRef<HTMLUListElement, SelectItemsProps>(
     };
 
     const renderDefaultItem = (option: Option) => {
-      return (
-        <li
-          onClick={handleSelectItem(option)}
-          key={option.value}
-          className="w-full px-4 py-2 cursor-pointer hover:bg-blue-100 transition duration-200"
-        >
-          {highlightMatch(option.label, searchQuery)}
-        </li>
-      );
+      if (renderItem) {
+        return (
+          <li
+            className="w-full"
+            onClick={handleSelectItem(option)}
+            key={option.value}
+          >
+            {renderItem(option)}
+          </li>
+        );
+      } else {
+        return (
+          <li
+            onClick={handleSelectItem(option)}
+            key={option.value}
+            className="w-full px-4 py-2 cursor-pointer hover:bg-blue-100 transition duration-200"
+          >
+            {highlightMatch(option.label, searchQuery)}
+          </li>
+        );
+      }
     };
 
     return (
       <ul
-        {...props}
         ref={ref}
         className="w-full flex flex-col items-center gap-2 py-2 max-h-48 overflow-y-auto"
       >
